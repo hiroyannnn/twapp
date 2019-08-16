@@ -1,4 +1,3 @@
-# Flask などの必要なライブラリをインポートする
 from flask import Flask, render_template, request, redirect, url_for
 import twitter_tweet
 import numpy as np
@@ -7,6 +6,8 @@ import numpy as np
 app = Flask(__name__)
 
 # メッセージをランダムに表示するメソッド
+
+
 def picked_up():
     messages = [
         "こんにちは、あなたの名前を入力してください",
@@ -15,7 +16,7 @@ def picked_up():
     ]
     # NumPy の random.choice で配列からランダムに取り出し
     return np.random.choice(messages)
-    #return messages
+    # return messages
 
 # ここからウェブアプリケーション用のルーティングを記述
 # index にアクセスしたときの処理
@@ -25,7 +26,7 @@ def index():
     # message = picked_up()
     message = ""
     # index.html をレンダリングする
-    return render_template('index.html',message=message, title=title)
+    return render_template('index.html', message=message, title=title)
 
 # /post にアクセスしたときの処理
 @app.route('/post', methods=['GET', 'POST'])
@@ -39,17 +40,20 @@ def post():
         token = request.form['token']
         token_secret = request.form['token_secret']
         # index.html をレンダリングする
-        twitter_tweet.postTweet(consumer_key,consumer_secret,token,token_secret,text)
-        #return render_template('index.html',name=name, title=title)
-        return render_template('index.html',consumer_key=consumer_key,consumer_secret=consumer_secret,token=token,token_secret=token_secret)
+        twitter_tweet.postTweet(
+            consumer_key, consumer_secret, token, token_secret, text)
+        # return render_template('index.html',name=name, title=title)
+        return render_template('index.html', consumer_key=consumer_key, consumer_secret=consumer_secret, token=token, token_secret=token_secret)
     else:
         # エラーなどでリダイレクトしたい場合はこんな感じで
         return redirect(url_for('index'))
+
 
 @app.route('/hello')
 def hello_world():
     return 'Hello, World!'
 
+
 if __name__ == '__main__':
-    app.debug = True # デバッグモード有効化
-    app.run(host='0.0.0.0') # どこからでもアクセス可能に  
+    app.debug = True  # デバッグモード有効化
+    app.run(host='0.0.0.0')  # どこからでもアクセス可能に
